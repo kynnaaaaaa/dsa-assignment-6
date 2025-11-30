@@ -3,33 +3,48 @@ using namespace std;
 
 struct Node {
     int data;
-    Node *prev, *next;
+    Node *prev;
+    Node *next;
 };
 
-Node* head = NULL;
+Node* head = 0;
 
 // Insert at end
-void insert(int x) {
-    Node* t = new Node{x, NULL, NULL};
-    if(head == NULL) head = t;
-    else {
-        Node* p = head;
-        while(p->next) p = p->next;
-        p->next = t;
-        t->prev = p;
+void insertEnd(int x) {
+    Node* t = new Node;
+    t->data = x;
+    t->prev = 0;
+    t->next = 0;
+
+    if(head == 0) {
+        head = t;
+        return;
     }
+
+    Node* p = head;
+    while(p->next != 0)
+        p = p->next;
+
+    p->next = t;
+    t->prev = p;
 }
 
-// Delete a node with value x
+// Delete a value
 void deleteNode(int x) {
     Node* p = head;
-    while(p && p->data != x) p = p->next;
-    if(!p) return;
 
-    if(p->prev) p->prev->next = p->next;
-    else head = p->next;
+    while(p != 0 && p->data != x)
+        p = p->next;
 
-    if(p->next) p->next->prev = p->prev;
+    if(p == 0) return;
+
+    if(p->prev != 0)
+        p->prev->next = p->next;
+    else
+        head = p->next;
+
+    if(p->next != 0)
+        p->next->prev = p->prev;
 
     delete p;
 }
@@ -37,31 +52,31 @@ void deleteNode(int x) {
 // Search a value
 bool searchNode(int x) {
     Node* p = head;
-    while(p) {
+    while(p != 0) {
         if(p->data == x) return true;
         p = p->next;
     }
     return false;
 }
 
-// Print list
+// Display DLL
 void display() {
     Node* p = head;
-    while(p) {
+    while(p != 0) {
         cout << p->data << " ";
         p = p->next;
     }
-    cout << "\n";
+    cout << endl;
 }
 
 int main() {
-    insert(10);
-    insert(20);
-    insert(30);
+    insertEnd(10);
+    insertEnd(20);
+    insertEnd(30);
 
     deleteNode(20);
 
-    cout << "Search 30: " << (searchNode(30) ? "Found" : "Not Found") << "\n";
+    cout << "Search 30: " << (searchNode(30) ? "Found" : "Not Found") << endl;
 
     display();
 }
