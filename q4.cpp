@@ -3,22 +3,56 @@ using namespace std;
 
 struct Node {
     char data;
-    Node *prev, *next;
+    Node* prev;
+    Node* next;
 };
 
-bool isPalindrome(Node* head) {
-    if(!head) return true;
+Node* head = NULL;
 
-    Node *L = head, *R = head;
+// Insert at end (simple)
+void insert(char x) {
+    Node* t = new Node;
+    t->data = x;
+    t->prev = t->next = NULL;
 
-    // go to last
-    while(R->next) R = R->next;
+    if (head == NULL) {
+        head = t;
+    } else {
+        Node* p = head;
+        while (p->next != NULL) p = p->next;
+        p->next = t;
+        t->prev = p;
+    }
+}
 
-    // compare both ends
-    while(L != R && R->next != L) {
-        if(L->data != R->data) return false;
-        L = L->next;
-        R = R->prev;
+// Check palindrome
+bool isPalindrome() {
+    if (head == NULL) return true;
+
+    Node* left = head;
+    Node* right = head;
+
+    // Move right to the end
+    while (right->next != NULL) right = right->next;
+
+    // Compare
+    while (left != right && right->next != left) {
+        if (left->data != right->data)
+            return false;
+        left = left->next;
+        right = right->prev;
     }
     return true;
+}
+
+int main() {
+    insert('R');
+    insert('A');
+    insert('D');
+    insert('A');
+    insert('R');
+
+    cout << (isPalindrome() ? "Palindrome" : "Not Palindrome");
+
+    return 0;
 }
